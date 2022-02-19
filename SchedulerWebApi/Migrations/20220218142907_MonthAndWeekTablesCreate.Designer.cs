@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchedulerWebApi.Data;
 
@@ -10,9 +11,10 @@ using SchedulerWebApi.Data;
 namespace SchedulerWebApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220218142907_MonthAndWeekTablesCreate")]
+    partial class MonthAndWeekTablesCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,7 +23,7 @@ namespace SchedulerWebApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("SchedulerWebApi.Entities.Employee", b =>
+            modelBuilder.Entity("SchedulerWebApi.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -39,19 +41,16 @@ namespace SchedulerWebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Employees");
+                    b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("SchedulerWebApi.Entities.EmployeeDefaultWeek", b =>
+            modelBuilder.Entity("SchedulerWebApi.Models.UserDefaultWeek", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Friday")
                         .IsRequired()
@@ -77,19 +76,21 @@ namespace SchedulerWebApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Wednesday")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
-                    b.ToTable("EmployeesDefaultWeeks");
+                    b.ToTable("UsersDefaultWeeks");
                 });
 
-            modelBuilder.Entity("SchedulerWebApi.Entities.EmployeeMonth", b =>
+            modelBuilder.Entity("SchedulerWebApi.Models.UserMonth", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -190,59 +191,44 @@ namespace SchedulerWebApi.Migrations
                     b.Property<string>("Day_9")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Month")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("EmployeesMonths");
-                });
-
-            modelBuilder.Entity("SchedulerWebApi.Entities.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UsersMonths");
                 });
 
-            modelBuilder.Entity("SchedulerWebApi.Entities.EmployeeDefaultWeek", b =>
+            modelBuilder.Entity("SchedulerWebApi.Models.UserDefaultWeek", b =>
                 {
-                    b.HasOne("SchedulerWebApi.Entities.Employee", null)
-                        .WithOne("DefaultWeek")
-                        .HasForeignKey("SchedulerWebApi.Entities.EmployeeDefaultWeek", "EmployeeId")
+                    b.HasOne("SchedulerWebApi.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SchedulerWebApi.Entities.Employee", b =>
+            modelBuilder.Entity("SchedulerWebApi.Models.UserMonth", b =>
                 {
-                    b.Navigation("DefaultWeek")
+                    b.HasOne("SchedulerWebApi.Models.User", "User")
+                        .WithMany("Months")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SchedulerWebApi.Models.User", b =>
+                {
+                    b.Navigation("Months");
                 });
 #pragma warning restore 612, 618
         }

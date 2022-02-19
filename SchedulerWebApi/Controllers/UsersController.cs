@@ -12,12 +12,5 @@ namespace SchedulerWebApi.Controllers
         {
             _context = context;
         }
-
-        [HttpGet]
-        public async Task<IActionResult> GetUsers()
-        {
-            var test = _context.Users.ToList();
-            return Ok("Success");
-        }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchedulerWebApi.Data;
 
@@ -10,9 +11,10 @@ using SchedulerWebApi.Data;
 namespace SchedulerWebApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220218144201_EmployeeTableCreate")]
+    partial class EmployeeTableCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,7 +23,7 @@ namespace SchedulerWebApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("SchedulerWebApi.Entities.Employee", b =>
+            modelBuilder.Entity("SchedulerWebApi.Models.Employee", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -42,7 +44,7 @@ namespace SchedulerWebApi.Migrations
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("SchedulerWebApi.Entities.EmployeeDefaultWeek", b =>
+            modelBuilder.Entity("SchedulerWebApi.Models.EmployeeDefaultWeek", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -83,13 +85,12 @@ namespace SchedulerWebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeId")
-                        .IsUnique();
+                    b.HasIndex("EmployeeId");
 
                     b.ToTable("EmployeesDefaultWeeks");
                 });
 
-            modelBuilder.Entity("SchedulerWebApi.Entities.EmployeeMonth", b =>
+            modelBuilder.Entity("SchedulerWebApi.Models.EmployeeMonth", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -198,10 +199,12 @@ namespace SchedulerWebApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EmployeeId");
+
                     b.ToTable("EmployeesMonths");
                 });
 
-            modelBuilder.Entity("SchedulerWebApi.Entities.User", b =>
+            modelBuilder.Entity("SchedulerWebApi.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -230,19 +233,31 @@ namespace SchedulerWebApi.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("SchedulerWebApi.Entities.EmployeeDefaultWeek", b =>
+            modelBuilder.Entity("SchedulerWebApi.Models.EmployeeDefaultWeek", b =>
                 {
-                    b.HasOne("SchedulerWebApi.Entities.Employee", null)
-                        .WithOne("DefaultWeek")
-                        .HasForeignKey("SchedulerWebApi.Entities.EmployeeDefaultWeek", "EmployeeId")
+                    b.HasOne("SchedulerWebApi.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Employee");
                 });
 
-            modelBuilder.Entity("SchedulerWebApi.Entities.Employee", b =>
+            modelBuilder.Entity("SchedulerWebApi.Models.EmployeeMonth", b =>
                 {
-                    b.Navigation("DefaultWeek")
+                    b.HasOne("SchedulerWebApi.Models.Employee", "Employee")
+                        .WithMany("Months")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("SchedulerWebApi.Models.Employee", b =>
+                {
+                    b.Navigation("Months");
                 });
 #pragma warning restore 612, 618
         }
