@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchedulerWebApi.Data;
 
@@ -10,9 +11,10 @@ using SchedulerWebApi.Data;
 namespace SchedulerWebApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220412060907_EmployeePositionAdded")]
+    partial class EmployeePositionAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,11 +97,11 @@ namespace SchedulerWebApi.Migrations
 
             modelBuilder.Entity("SchedulerWebApi.Entities.EmployeeMonth", b =>
                 {
-                    b.Property<int>("EmployeeId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Month")
-                        .HasColumnType("nvarchar(450)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Day_1")
                         .HasColumnType("nvarchar(max)");
@@ -194,13 +196,13 @@ namespace SchedulerWebApi.Migrations
                     b.Property<string>("Day_9")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<string>("Month")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("EmployeeId", "Month");
+                    b.HasKey("Id");
 
                     b.ToTable("EmployeesMonths");
                 });

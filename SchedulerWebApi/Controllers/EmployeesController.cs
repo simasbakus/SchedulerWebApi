@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SchedulerWebApi.Entities;
+using SchedulerWebApi.Models;
 
 namespace SchedulerWebApi.Controllers
 {
@@ -30,6 +31,21 @@ namespace SchedulerWebApi.Controllers
             }
         }
 
+        [HttpGet("{employeeId}")]
+        public IActionResult GetEmployee(int employeeId)
+        {
+            try
+            {
+                var employee = _context.Employees.Include(e => e.DefaultWeek).FirstOrDefault(e => e.Id == employeeId);
+
+                return Ok(employee);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost]
         public IActionResult CreateEmployee([FromBody] Employee employee)
         {
@@ -45,5 +61,28 @@ namespace SchedulerWebApi.Controllers
                 return BadRequest(ex.Message);
             }
         } 
+
+        [HttpPut("{employeeId}")]
+        public IActionResult UpdateEmployee(int employeeId, [FromBody] EmployeeDTO updatedEmployee)
+        {
+            try
+            {
+                var currentEmployee = _context.Employees.Include(e => e.DefaultWeek).FirstOrDefault(e => e.Id == employeeId);
+
+                if (currentEmployee != null)
+                {
+                    _context.Entry(currentEmployee).CurrentValues.SetValues(updatedEmployee);
+                    _context.Entry(currentEmployee.DefaultWeek).CurrentValues.SetValues(updatedEmployee.DefaultWeek);
+
+                    _context.SaveChanges();
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

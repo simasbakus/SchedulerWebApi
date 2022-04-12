@@ -11,5 +11,11 @@ namespace SchedulerWebApi.Data
         public DbSet<Employee> Employees { get; set; }
         public DbSet<EmployeeMonth> EmployeesMonths { get; set; }
         public DbSet<EmployeeDefaultWeek> EmployeesDefaultWeeks { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<EmployeeMonth>().HasKey(em => new { em.EmployeeId, em.Month });
+        }
     }
 }

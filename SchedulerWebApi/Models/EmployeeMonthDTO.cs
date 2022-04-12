@@ -1,18 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Nager.Date;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace SchedulerWebApi.Entities
+﻿namespace SchedulerWebApi.Models
 {
-    public class EmployeeMonth
+    public class EmployeeMonthDTO
     {
-        private const string DATE_FORMAT = "yyyy-MM";
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public int EmployeeId { get; set; }
-        public string Month { get; set; }
         public string? Day_1 { get; set; }
         public string? Day_2 { get; set; }
         public string? Day_3 { get; set; }
@@ -44,26 +33,5 @@ namespace SchedulerWebApi.Entities
         public string? Day_29 { get; set; }
         public string? Day_30 { get; set; }
         public string? Day_31 { get; set; }
-
-        public EmployeeMonth() { }
-
-        public EmployeeMonth(Employee employee, DateTime monthDate)
-        {
-            EmployeeId = employee.Id;
-            Month = monthDate.ToString(DATE_FORMAT);
-
-            int daysInMonth = DateTime.DaysInMonth(monthDate.Year, monthDate.Month);
-
-            for (int i = 1; i <= daysInMonth; i++)
-            {
-                var day = new DateTime(monthDate.Year, monthDate.Month, i);
-
-                var employeeDaySchedule = employee.DefaultWeek.GetType().GetProperty(day.DayOfWeek.ToString())?.GetValue(employee.DefaultWeek);
-
-                if (DateSystem.IsPublicHoliday(day, CountryCode.LT)) employeeDaySchedule = "S";
-
-                GetType().GetProperty($"Day_{i}")?.SetValue(this, employeeDaySchedule);
-            }
-        }
     }
 }
