@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SchedulerWebApi.Entities;
 using SchedulerWebApi.Models;
+using SchedulerWebApi.Repositories;
 
 namespace SchedulerWebApi.Controllers
 {
@@ -10,10 +11,10 @@ namespace SchedulerWebApi.Controllers
     [ApiController]
     public class EmployeesController : ControllerBase
     {
-        private DataContext _context;
-        public EmployeesController(DataContext context)
+        private IEmployeesRepository _repository;
+        public EmployeesController(IEmployeesRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         [HttpGet]
@@ -21,7 +22,7 @@ namespace SchedulerWebApi.Controllers
         {
             try
             {
-                var employees = _context.Employees.Include(e => e.DefaultWeek).ToList();
+                var employees = _repository.GetAllEmployees();
 
                 return Ok(employees);
             }
@@ -36,7 +37,7 @@ namespace SchedulerWebApi.Controllers
         {
             try
             {
-                var employee = _context.Employees.Include(e => e.DefaultWeek).FirstOrDefault(e => e.Id == employeeId);
+                var employee = _repository.GetEmployeeById(employeeId);
 
                 return Ok(employee);
             }
@@ -51,10 +52,9 @@ namespace SchedulerWebApi.Controllers
         {
             try
             {
-                var newEmployee = _context.Employees.Add(employee);
-                _context.SaveChanges();
+                var newEmployee = _repository.CreateEmployee(employee);
 
-                return Ok();
+                return Ok(newEmployee);
             }
             catch (Exception ex)
             {
@@ -67,15 +67,7 @@ namespace SchedulerWebApi.Controllers
         {
             try
             {
-                var currentEmployee = _context.Employees.Include(e => e.DefaultWeek).FirstOrDefault(e => e.Id == employeeId);
-
-                if (currentEmployee != null)
-                {
-                    _context.Entry(currentEmployee).CurrentValues.SetValues(updatedEmployee);
-                    _context.Entry(currentEmployee.DefaultWeek).CurrentValues.SetValues(updatedEmployee.DefaultWeek);
-
-                    _context.SaveChanges();
-                }
+                _repository.UpdateEmployee(employeeId, updatedEmployee);
 
                 return Ok();
             }

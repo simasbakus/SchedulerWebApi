@@ -13,6 +13,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 });
 
 builder.Services.AddScoped<ISchedulesRepository, ShedulesRepository>();
+builder.Services.AddScoped<IEmployeesRepository, EmployeesRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
