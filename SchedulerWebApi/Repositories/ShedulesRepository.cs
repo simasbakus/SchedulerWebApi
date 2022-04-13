@@ -31,21 +31,18 @@ namespace SchedulerWebApi.Repositories
             return allEmployeesSchedules;
         }
 
-        public EmployeeMonth? GetByKey(int employeeId, string month)
+        public EmployeeMonth? GetByEmployeeIdAndMonth(int employeeId, string month)
         {
-            return _context.EmployeesMonths.Find(employeeId, month);
+            return _context.EmployeesMonths.Include(em => em.Days).FirstOrDefault(em => em.EmployeeId == employeeId && em.Month == month);
         }
 
-        public void Update(int employeeId, string month, EmployeeMonthDTO newSchedule)
+        public void DeleteByMonth(string month)
         {
-            var employeeSchedule = _context.EmployeesMonths.Find(employeeId, month);
-
-            if (employeeSchedule != null)
+            foreach (var employeeMonth in _context.EmployeesMonths.Where(em => em.Month == month))
             {
-                _context.Entry(employeeSchedule).CurrentValues.SetValues(newSchedule);
-
-                _context.SaveChanges();
+                _context.Remove(employeeMonth);
             }
+            _context.SaveChanges();
         }
     }
 }

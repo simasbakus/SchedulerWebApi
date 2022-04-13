@@ -40,7 +40,7 @@ namespace SchedulerWebApi.Controllers
         {
             try
             {
-                var result = _repository.GetByKey(employeeId, month);
+                var result = _repository.GetByEmployeeIdAndMonth(employeeId, month);
 
                 return Ok(result);
             }
@@ -50,12 +50,12 @@ namespace SchedulerWebApi.Controllers
             }
         }
 
-        [HttpPut("{employeeId}/{month}")]
-        public IActionResult UpdateEmployeeMonthSchedule(int employeeId, string month, [FromBody] EmployeeMonthDTO newSchedule)
+        [HttpDelete("{month}")]
+        public IActionResult DeleteSchedulesByMonth(string month)
         {
             try
             {
-                _repository.Update(employeeId, month, newSchedule);
+                _repository.DeleteByMonth(month);
 
                 return Ok();
             }

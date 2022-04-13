@@ -6,7 +6,7 @@ namespace SchedulerWebApi.Repositories
     public interface ISchedulesRepository
     {
         List<EmployeeMonth> GenerateSchedule(DateTime monthDate);
-        EmployeeMonth? GetByKey(int employeeId, string month);
-        void Update(int employeeId, string month, EmployeeMonthDTO newSchedule);
+        EmployeeMonth? GetByEmployeeIdAndMonth(int employeeId, string month);
+        void DeleteByMonth(string month);
     }
 }

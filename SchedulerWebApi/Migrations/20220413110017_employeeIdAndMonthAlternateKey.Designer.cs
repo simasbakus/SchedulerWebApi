@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchedulerWebApi.Data;
 
@@ -10,9 +11,10 @@ using SchedulerWebApi.Data;
 namespace SchedulerWebApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220413110017_employeeIdAndMonthAlternateKey")]
+    partial class employeeIdAndMonthAlternateKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,6 +103,99 @@ namespace SchedulerWebApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("Day_1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_10")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_11")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_12")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_13")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_14")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_15")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_16")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_17")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_18")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_19")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_20")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_21")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_22")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_23")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_24")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_25")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_26")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_27")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_28")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_29")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_30")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_31")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_4")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_5")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_6")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_7")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_8")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Day_9")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
@@ -113,35 +208,6 @@ namespace SchedulerWebApi.Migrations
                     b.HasAlternateKey("EmployeeId", "Month");
 
                     b.ToTable("EmployeesMonths");
-                });
-
-            modelBuilder.Entity("SchedulerWebApi.Entities.EmployeeMonthDay", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("Day")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EmployeeMonthId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Schedule")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Weekday")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeMonthId");
-
-                    b.ToTable("EmployeesMonthDays");
                 });
 
             modelBuilder.Entity("SchedulerWebApi.Entities.User", b =>
@@ -182,24 +248,10 @@ namespace SchedulerWebApi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SchedulerWebApi.Entities.EmployeeMonthDay", b =>
-                {
-                    b.HasOne("SchedulerWebApi.Entities.EmployeeMonth", null)
-                        .WithMany("Days")
-                        .HasForeignKey("EmployeeMonthId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("SchedulerWebApi.Entities.Employee", b =>
                 {
                     b.Navigation("DefaultWeek")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("SchedulerWebApi.Entities.EmployeeMonth", b =>
-                {
-                    b.Navigation("Days");
                 });
 #pragma warning restore 612, 618
         }
