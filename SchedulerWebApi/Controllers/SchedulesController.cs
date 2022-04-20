@@ -35,6 +35,21 @@ namespace SchedulerWebApi.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult GetAllSchedules()
+        {
+            try
+            {
+                var result = _repository.GetAllSchedules();
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet("{employeeId}/{month}")]
         public IActionResult GetMonthScheduleByEmployee(int employeeId, string month)
         {

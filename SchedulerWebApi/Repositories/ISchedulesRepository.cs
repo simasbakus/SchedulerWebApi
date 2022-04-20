@@ -8,5 +8,6 @@ namespace SchedulerWebApi.Repositories
         List<EmployeeMonth> GenerateSchedule(DateTime monthDate);
         EmployeeMonth? GetByEmployeeIdAndMonth(int employeeId, string month);
         void DeleteByMonth(string month);
+        List<EmployeeMonth> GetAllSchedules();
     }
 }

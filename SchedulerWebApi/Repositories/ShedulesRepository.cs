@@ -31,6 +31,11 @@ namespace SchedulerWebApi.Repositories
             return allEmployeesSchedules;
         }
 
+        public List<EmployeeMonth> GetAllSchedules()
+        {
+            return _context.EmployeesMonths.Include(em => em.Days).ToList();
+        }
+
         public EmployeeMonth? GetByEmployeeIdAndMonth(int employeeId, string month)
         {
             return _context.EmployeesMonths.Include(em => em.Days).FirstOrDefault(em => em.EmployeeId == employeeId && em.Month == month);
